@@ -161,8 +161,19 @@ end
 
 -- [[ UTILS ]]
 
+local function get_data_dir()
+   local data_home = os.getenv("XDG_DATA_HOME")
+   if data_home == nil then
+      data_home = os.getenv("HOME") .. "/.local/share"
+   end
+
+   local file_dir = data_home .. "/nvim/" .. PLUGIN_NAME
+
+   return file_dir
+end
+
 --- this gets the colorscheme id with the colorscheme name
-local function get_colorscheme_id(colorscheme)
+local function get_colorscheme_id_from_colorscheme(colorscheme)
    for id, colorscheme_param in ipairs(COLORSCHEME_PARAMS) do
       if colorscheme == colorscheme_param.colorscheme then
          return id
@@ -172,17 +183,33 @@ local function get_colorscheme_id(colorscheme)
    return 0
 end
 
+local function get_colorscheme_id_from_memory()
+   local file_path = get_data_dir() .. "/data"
+   local file, err = io.open(file_path, "r")
+
+   if not file then
+      print("Could not retrieve the last colorscheme set, err :", err)
+      return
+   end
+
+   -- only read the first line
+   local colorscheme_id = file:read("*l")
+   file:close()
+
+   return tonumber(colorscheme_id)
+end
+
 --- this will preview the colorscheme, we execute pre and post functions to
 --- make sure the colorscheme is displayed correcly.
-local function display_colorscheme(colorscheme_params)
+local function display_colorscheme(colorscheme_param)
    -- TODO: add verify if we have not aleready displayed this theme
    --       by looking at the current theme
 
-   colorscheme_params.pre_function()
+   colorscheme_param.pre_function()
 
-   vim.cmd("colorscheme " .. colorscheme_params.colorscheme)
+   vim.cmd("colorscheme " .. colorscheme_param.colorscheme)
 
-   colorscheme_params.post_function()
+   colorscheme_param.post_function()
 end
 
 --- when we have selected the colorscheme we call pre and post callbacks, we
@@ -195,22 +222,22 @@ local function save_colorscheme(colorscheme_params)
    colorscheme_params.post_callback()
 
    -- saving the file
-   local data_home = os.getenv("XDG_DATA_HOME")
-   if data_home == nil then
-      data_home = os.getenv("HOME") .. "/.local/share"
-   end
-
-   local file_dir = data_home .. "/nvim/" .. PLUGIN_NAME
+   local file_dir = get_data_dir()
    os.execute("mkdir -p " .. file_dir)
    local file, err = io.open(file_dir .. "/data", "w")
 
    if file then
-      local plugin_number = get_colorscheme_id(colorscheme_params.colorscheme)
+      local plugin_number = get_colorscheme_id_from_colorscheme(colorscheme_params.colorscheme)
       file:write(tostring(plugin_number))
       file:close()
    else
       print("Could not save colorscheme to memory, err :", err)
    end
+end
+
+local function retrieve_last_colorscheme()
+   local id = get_colorscheme_id_from_memory()
+   display_colorscheme(COLORSCHEME_PARAMS[id])
 end
 
 local function write_to_buf()
@@ -222,13 +249,19 @@ local function write_to_buf()
       })
    end
 
-   vim.api.nvim_win_set_cursor(0, { 1, 0 })
+   vim.api.nvim_win_set_cursor(INTERFACE.win_id, { 1, 0 })
 
    -- get sandwiched
    vim.api.nvim_set_option_value("modifiable", true, { buf = INTERFACE.buf_id })
    vim.api.nvim_buf_set_lines(0, 0, 1, false, lines)
    vim.api.nvim_set_option_value("modifiable", false, { buf = INTERFACE.buf_id })
 end
+
+local function cursor_moved(interface)
+   local line = vim.api.nvim_win_get_cursor(interface.win_id)[1]
+   display_colorscheme(COLORSCHEME_PARAMS[line])
+end
+
 
 -- [[ Windows ]]
 -- NOTE: this section is inspired by the themery plugin :
@@ -262,11 +295,6 @@ local function close_win()
    }
 end
 
-local function cursor_moved(interface)
-   local line = vim.api.nvim_win_get_cursor(interface.win_id)[1]
-   display_colorscheme(COLORSCHEME_PARAMS[line])
-end
-
 local function setup_win_config()
    -- buf options
    vim.api.nvim_set_option_value("filetype", PLUGIN_NAME, { buf = INTERFACE.buf_id })
@@ -277,9 +305,8 @@ local function setup_win_config()
    vim.api.nvim_set_option_value("scrolloff", 4, { win = INTERFACE.win_id })
 
    -- autocmds
-   local group = vim.api.nvim_create_augroup(PLUGIN_NAME .. "-WINCONFIG", { clear = true })
    vim.api.nvim_create_autocmd("CursorMoved", {
-      group = group,
+      group = vim.api.nvim_create_augroup(PLUGIN_NAME .. "-WINCONFIG", { clear = true }),
       buffer = INTERFACE.buf_id,
       callback = function()
          cursor_moved(INTERFACE)
@@ -287,7 +314,7 @@ local function setup_win_config()
    })
 
    -- TODO: make it configurable (<CR>)
-   vim.api.nvim_set_keymap("n", "<CR>", "", {
+   vim.api.nvim_buf_set_keymap(INTERFACE.buf_id, "n", "<CR>", "", {
       callback = function()
          local line = vim.api.nvim_win_get_cursor(INTERFACE.win_id)[1]
          save_colorscheme(COLORSCHEME_PARAMS[line])
@@ -305,6 +332,7 @@ local function setup_win_closing()
       buffer = INTERFACE.buf_id,
       callback = function()
          close_win()
+         retrieve_last_colorscheme()
       end,
       once = true,
    })
@@ -350,6 +378,22 @@ local function toggle_win()
    setup_win_config()
 
    write_to_buf()
+
+   -- place the cursor in the right starting position
+   local row = get_colorscheme_id_from_memory()
+   if row == 0 then
+      row = 1
+   end
+
+   local size = 0
+   for _, _ in ipairs(COLORSCHEME_PARAMS) do size = size + 1 end
+
+   if row > size then
+      row = 1
+   end
+
+   print(row)
+   vim.api.nvim_win_set_cursor(INTERFACE.win_id, { row, 0 })
 end
 
 
@@ -365,8 +409,7 @@ local function setup(opts)
    vim.keymap.set("n", "<leader>h", toggle_win)
 end
 
--- FIXME: remove me
-setup({})
+-- setup({})
 
 return {
    setup = setup,
