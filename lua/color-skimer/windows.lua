@@ -54,7 +54,7 @@ local function setup_win_config()
    vim.api.nvim_buf_set_keymap( constants.INTERFACE.buf_id, "n", "<CR>", "", {
       callback = function()
          local line = vim.api.nvim_win_get_cursor( constants.INTERFACE.win_id )[1]
-         utils.save_colorscheme( constants.COLORSHCEME_PARAMS[line] )
+         utils.save_colorscheme( constants.COLORSCHEME_PARAMS[line] )
          close_win()
       end,
    } )
