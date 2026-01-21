@@ -31,11 +31,15 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 ### 1: how to interact with the plugin ?
 with a keymap :
 ```lua
-cs = require("color-skimer")
+cs = require( "color-skimer" )
 -- cs.toggle is the functions to toggle the menu
 vim.api.nvim_set_keymap( "n", "<leader>st", "", { callback = cs.toggle, desc = "Search themes" } )
 ```
-or just use the command ```:ColorSkimerToggle```
+
+or just use the command ```:ColorSkimerToggle```:
+```lua
+vim.api.nvim_set_keymap( "n", "<leader>st", "<cmd>ColorSkimerToggle<CR>", { desc = "Search themes" } )
+```
 
 ### 2: base binds
 - movement:
@@ -63,17 +67,17 @@ return {
 Packer :
 ```lua
 use 'Megapixel-code/color-skimer.nvim'
-require("color-skimer").setup({
+require( "color-skimer" ).setup( {
    -- config goes here
-})
+} )
 ```
 
 Vim-plug
 ```lua
 Plug 'Megapixel-code/color-skimer.nvim'
-require("color-skimer").setup({
+require( "color-skimer" ).setup( {
    -- config goes here
-})
+} )
 ```
 
 ## CONFIGURATION
