@@ -29,11 +29,10 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 ## USAGE
 
 ### 1: how to interact with the plugin ?
-with a keymap :
+with the plugin api :
 ```lua
-cs = require( "color-skimer" )
--- cs.toggle is the functions to toggle the menu
-vim.api.nvim_set_keymap( "n", "<leader>st", "", { callback = cs.toggle, desc = "Search themes" } )
+color_skimer_toggle_function = require( "color-skimer" ).toggle
+vim.api.nvim_set_keymap( "n", "<leader>st", "", { callback = color_skimer_toggle_function, desc = "Search themes" } )
 ```
 
 or just use the command ```:ColorSkimerToggle```:
