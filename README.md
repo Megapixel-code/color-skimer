@@ -31,7 +31,7 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
 ### 1: how to interact with the plugin ?
 with the plugin api :
 ```lua
-color_skimer_toggle_function = require( "color-skimer" ).toggle
+local color_skimer_toggle_function = require( "color-skimer" ).toggle
 vim.api.nvim_set_keymap( "n", "<leader>st", "", { callback = color_skimer_toggle_function, desc = "Search themes" } )
 ```
 
