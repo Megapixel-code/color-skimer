@@ -87,10 +87,24 @@ local function get_colorscheme_params( options_table )
    return result
 end
 
+--- Will create data file if the file doesnt aleready exist
+local function create_data_file()
+   local file_path = utils.get_data_dir() .. "/data"
+   local file = io.open( file_path, "r" )
+
+   if not file then
+      utils.save_colorscheme( 1 )
+   else
+      file:close()
+   end
+end
+
 local function setup( opts )
+   opts = opts or {}
+
    constants.COLORSCHEME_PARAMS = get_colorscheme_params( opts )
 
-   print( constants.COLORSCHEME_PARAMS[2].pre_function )
+   create_data_file()
 
    utils.retrieve_last_colorscheme()
 end

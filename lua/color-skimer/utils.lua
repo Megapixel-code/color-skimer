@@ -107,4 +107,5 @@ return {
    retrieve_last_colorscheme = retrieve_last_colorscheme,
    write_to_buf = write_to_buf,
    cursor_moved = cursor_moved,
+   get_data_dir = get_data_dir,
 }
