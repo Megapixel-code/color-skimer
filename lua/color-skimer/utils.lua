@@ -1,12 +1,12 @@
 local constants = require( "color-skimer.constants" )
 
 local function get_data_dir()
-   local data_home = os.getenv( "XDG_DATA_HOME" )
+   local data_home = vim.fn.stdpath( "data" )
    if data_home == nil then
-      data_home = os.getenv( "HOME" ) .. "/.local/share"
+      data_home = os.getenv( "HOME" ) .. "/.local/share/nvim"
    end
 
-   local file_dir = data_home .. "/nvim/" .. constants.PLUGIN_NAME
+   local file_dir = data_home .. "/" .. constants.PLUGIN_NAME
 
    return file_dir
 end
