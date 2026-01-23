@@ -1,6 +1,6 @@
 # Color-skimer
 
-Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change your colorschemes quickly and easily. Inspired by [themery.nvim](https://github.com/zaldih/themery.nvim)
+Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change your colorschemes quickly and easily. Inspired by [themery.nvim](https://github.com/zaldih/themery.nvim).
 
 ## TABLE OF CONTENTS
 
@@ -16,15 +16,16 @@ Color-skimer is a lightweight colorscheme/theme switcher. It allow you to change
    - [default config](#default-config-)
 - [CUSTOM HOOKS](#custom-hooks)
 - [WHY COLOR-SKIMER ?](why-color-skimer-)
+- [CONTRIBUTING](#contributing)
 - [LICENCE](#licence)
 
 ## FEATURES
 
-- **Quick Colorscheme Switching**: Ability to cycle through your colorschemes fast
-- **Persistent**: Colorscheme stays set across your sessions
-- **Live Preview**: Preview your colorschemes as you move through your list
-- **Custom Lua Hooks**: you can define Lua functions to be executed at specific times (see [CUSTOM HOOKS](#custom-hooks))
-- **No dependencies**
+- **Quick Colorscheme Switching**: Ability to cycle through your colorschemes fast.
+- **Persistent**: Colorscheme stays set across your sessions.
+- **Live Preview**: Preview your colorschemes as you move through your list.
+- **Custom Lua Hooks**: you can define Lua functions to be executed at specific instants. (see [CUSTOM HOOKS](#custom-hooks))
+- **No dependencies**.
 
 ## USAGE
 
@@ -71,7 +72,7 @@ require( "color-skimer" ).setup( {
 } )
 ```
 
-Vim-plug
+Vim-plug :
 ```lua
 Plug 'Megapixel-code/color-skimer.nvim'
 require( "color-skimer" ).setup( {
@@ -200,7 +201,7 @@ Examples :
 {
    pre_function = {
       -- Here it would set nvim in dark mode for every colorscheme
-      -- exept vscode where set it to light mode
+      -- except vscode where set it to light mode
       ["*"] = function()
          vim.o.background = "dark"
       end,
@@ -233,13 +234,18 @@ Examples :
 Other plugins options :
 - themery: https://github.com/zaldih/themery.nvim
 
-I used themery for a long time. Whilst this plugin is great there are few reasons I wanted to create this and move away from themery:
+I used themery for a long time. Whilst this plugin is great there are few reasons I wanted to create this and move away from themery :
 
-- 1: I **need** the post_save_callback hook to update my terminal colors after every colorscheme save
-- 2: I want to be able to have Lua function instead of text blocks that get executed
+- 1: I **need** the post_save_callback hook to update my terminal colors after every colorscheme save.
+- 2: I want to be able to have Lua function instead of text blocks that get executed.
 - 3: Themery seems to go in the direction of a complete theme manager with a community repertoire. I do not have the need for this and I would rather have a lighter plugin than have that bloat built in (my opinion).
-- 4: Color-skimer has (in my opinion) better configuration settings
-- 5: To have a bit of fun, this is my first plugin
+- 4: Color-skimer has (in my opinion) better configuration settings.
+- 5: To have a bit of fun, this is my first plugin.
 
-## LICENCE
+## CONTRIBUTING
+- No AI slop.
+- Only submit a pull request after having a prior issue or discussion.
+- Keep PRs small and focused.
+
+## LICENSE
 GPL-3
