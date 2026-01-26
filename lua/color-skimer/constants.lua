@@ -7,7 +7,7 @@ PLUGIN_NAME = "color-skimer"
 --- @class function_field
 --- @field [string] function function that will be executed at a specific time
 
---- @class config
+--- @class color_skimer_config
 --- @field colorscheme string[] array of all of your colorschemes
 --- @field name_override name_override? this will override the name displayed in the preview menu
 --- @field pre_function function_field? this will be called before each preview of the colorscheme
@@ -15,7 +15,7 @@ PLUGIN_NAME = "color-skimer"
 --- @field pre_callback function_field? this will be called before we save the colorscheme to memory
 --- @field post_callback function_field? this will be called after we save the colorscheme to memory
 
---- @type config
+--- @type color_skimer_config
 DEFAULT_CONFIG = {
    colorscheme = {
       -- default vim themes

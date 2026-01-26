@@ -84,11 +84,13 @@ require( "color-skimer" ).setup( {
 
 ### Example config :
 ```lua
-{
+--- @type color_skimer_config
+local options = {
    colorscheme = { -- < your colorschemes names
       "github_dark_default",
       "vscode",
       "lackluster",
+      "no-clown-fiesta-dark",
       "vague",
       "kanso-ink",
       "kanagawa-paper-ink",
@@ -96,7 +98,6 @@ require( "color-skimer" ).setup( {
       "tokyobones",
       "neobones",
       "spaceduck",
-      "slightlyclownish",
       "base16-ashes",
       "base16-kanagawa-dragon",
       "base16-vulcan",
@@ -112,12 +113,12 @@ require( "color-skimer" ).setup( {
          -- you can use the star to execute before each
          -- will execute before displaying colorscheme
          -- [Example]
-         -- Here it would print "aww" for every colorscheme
-         -- exept github_dark_default where it would only print "eww"
-         print( "aww" )
+         -- Here it would set every colorscheme to dark mode
+         -- exept vscode where it would set it to light mode
+         vim.o.background = "dark"
       end,
-      ["github_dark_default"] = function()
-         print( "eww" )
+      ["vscode"] = function()
+         vim.o.background = "light"
       end,
    },
    post_function = { -- < this will be called after each preview of the colorscheme
@@ -129,8 +130,19 @@ require( "color-skimer" ).setup( {
    },
    post_callback = { -- < this will be called after we save the colorscheme to memory
       -- same options as pre_function
+      ["*"] = function()
+         -- [Example]
+         -- Here it would print "aww" for every colorscheme
+         -- exept github_dark_default where it would only print "eww"
+         print( "aww" )
+      end,
+      ["github_dark_default"] = function()
+         print( "eww" )
+      end,
    },
 }
+
+require( "color-skimer" ).setup( options )
 ```
 
 ### Default config :

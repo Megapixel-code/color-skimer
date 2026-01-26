@@ -2,7 +2,7 @@ local constants = require( "color-skimer.constants" )
 local utils = require( "color-skimer.utils" )
 
 --- Function that setup the tables to be read by the rest of the program
---- @param config config user config
+--- @param config color_skimer_config user config
 --- @return COLORSCHEME_PARAMS return table that can be read by the program
 local function get_colorscheme_params( config )
    local default = constants.DEFAULT_CONFIG
@@ -87,7 +87,7 @@ local function create_data_file()
 end
 
 --- Initialize the plugin with the user config
---- @param config config user config
+--- @param config color_skimer_config user config
 local function setup( config )
    config = config or {}
 
