@@ -62,7 +62,7 @@ local function save_colorscheme( colorscheme_id )
       file:write( tostring( colorscheme_id ) )
       file:close()
    else
-      print( "Could not save colorscheme to memory, err :", err )
+      print( "ERROR: Could not save colorscheme to memory, err : ", err )
    end
 
    colorscheme_param.post_save()
