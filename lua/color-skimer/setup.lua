@@ -15,7 +15,7 @@ local function get_colorscheme_params( config )
    local pre_save
    local post_save
 
-   for key, _ in ipairs( default ) do
+   for key, _ in pairs( default ) do
       if config[key] == nil then
          config[key] = default[key]
       end
