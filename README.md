@@ -116,7 +116,6 @@ local options = {
    pre_preview = { -- < this will be called before each preview of the colorscheme
       ["*"] = function()
          -- you can use the star to execute before each
-         -- will execute before displaying colorscheme
          -- [Example]
          -- Here it would set every colorscheme to dark mode
          -- exept vscode where it would set it to light mode
@@ -127,14 +126,14 @@ local options = {
       end,
    },
    post_preview = { -- < this will be called after each preview of the colorscheme
-      -- same options as pre_function
+      -- same options as pre_preview
    },
 
    pre_save = { -- < this will be called before we save the colorscheme to memory
-      -- same options as pre_function
+      -- same options as pre_preview
    },
    post_save = { -- < this will be called after we save the colorscheme to memory
-      -- same options as pre_function
+      -- same options as pre_preview
       ["*"] = function()
          -- [Example]
          -- Here it would print "aww" for every colorscheme
@@ -256,10 +255,10 @@ Other plugins options :
 
 I used themery for a long time. Whilst this plugin is great there are few reasons I wanted to create this and move away from themery :
 
-- 1: I **need** the post_save_callback hook to update my terminal colors after every colorscheme save.
+- 1: I **need** the post_save hook to update my terminal colors after every colorscheme save.
 - 2: I want to be able to have Lua function instead of text blocks that get executed.
 - 3: Themery seems to go in the direction of a complete theme manager with a community repertoire. I do not have the need for this and I would rather have a lighter plugin than have that bloat built in (my opinion).
-- 4: Color-skimer has (in my opinion) better configuration settings.
+- 4: Color-skimer has (in my opinion) better/nicer configuration settings.
 - 5: To have a bit of fun, this is my first plugin.
 
 ## CONTRIBUTING
