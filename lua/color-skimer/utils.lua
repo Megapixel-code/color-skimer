@@ -135,7 +135,8 @@ local function write_to_buf()
 
    -- get sandwiched
    vim.api.nvim_set_option_value( "modifiable", true, { buf = constants.INTERFACE.buf_id } )
-   vim.api.nvim_buf_set_lines( 0, 0, 1, false, lines )
+   vim.api.nvim_buf_set_lines( constants.INTERFACE.buf_id, 0, -1, false, lines )
+   vim.cmd( "%center" .. constants.COLORSCHEME_PARAMS.window_config.shape().width )
    vim.api.nvim_set_option_value( "modifiable", false, { buf = constants.INTERFACE.buf_id } )
 end
 

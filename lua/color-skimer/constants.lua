@@ -84,16 +84,20 @@ DEFAULT_CONFIG = {
          title_pos = "center",
       },
       -- You can also have a function give the width, height, row and col of the menu window
-      -- shape = function()
-      --    -- your function returning a table with width, height, row and col fields
-      --    --- @type color_skimer_win_shape
-      --    return {
-      --       width = ?,
-      --       height = ?,
-      --       row = ?,
-      --       col = ?,
-      --    }
-      -- end,
+      shape = function()
+         local editor_columns = vim.api.nvim_get_option_value( "columns", {} )
+         local editor_rows = vim.api.nvim_get_option_value( "lines", {} )
+         local width = 40
+         local height = 15
+
+         --- @type color_skimer_win_shape
+         return {
+            width = width - 2,
+            height = height - 2,
+            col = (editor_columns / 2) - (width / 2),
+            row = (editor_rows / 2) - (height / 2),
+         }
+      end,
    },
 
    -- Same options as the {lhs} parameter of ':h vim.keymap.set()'

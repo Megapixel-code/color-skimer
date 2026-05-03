@@ -4,26 +4,6 @@ local utils = require( "color-skimer.utils" )
 -- NOTE: this file is partly inspired by the themery plugin :
 --       https://github.com/zaldih/themery.nvim/
 
---- Returns a table with the coordinates and size of the window
---- @return color_skimer_win_shape
-local function get_win_shape()
-   local editor_columns = vim.api.nvim_get_option_value( "columns", {} )
-   local editor_rows = vim.api.nvim_get_option_value( "lines", {} )
-   local width = 40
-   local height = 15
-
-   --- @type color_skimer_win_shape
-   local result = {
-      width = width - 2,
-      height = height - 2,
-      col = (editor_columns / 2) - (width / 2),
-      row = (editor_rows / 2) - (height / 2),
-   }
-
-   return result
-end
-
-
 
 --- Function to close the window, does nothing if no window is open
 local function close_win()
@@ -120,22 +100,16 @@ local function toggle_win()
       return
    end
 
-   local shape
-   if constants.COLORSCHEME_PARAMS.window_config.shape == nil then
-      shape = get_win_shape()
-   else
-      shape = constants.COLORSCHEME_PARAMS.window_config.shape()
-   end
-
-   --- @type vim.api.keyset.win_config
-   local config = constants.COLORSCHEME_PARAMS.window_config.config
-   config.width = shape.width
-   config.height = shape.height
-   config.row = shape.row
-   config.col = shape.col
+   local size = constants.COLORSCHEME_PARAMS.window_config.shape()
+   local win_conf = constants.COLORSCHEME_PARAMS.window_config.config
+   win_conf.width = size.width
+   win_conf.height = size.height
+   win_conf.row = size.row
+   win_conf.col = size.col
 
    local buf_id = vim.api.nvim_create_buf( false, true )
-   local win_id = vim.api.nvim_open_win( buf_id, true, config )
+   --- @diagnostic disable-next-line
+   local win_id = vim.api.nvim_open_win( buf_id, true, win_conf )
 
    constants.INTERFACE = {
       buf_id = buf_id,
@@ -149,7 +123,11 @@ local function toggle_win()
 
    -- place the cursor in the right starting position
    local row = utils.get_colorscheme_id_from_memory()
-   vim.api.nvim_win_set_cursor( constants.INTERFACE.win_id, { row, 0 } )
+   vim.api.nvim_win_set_cursor( constants.INTERFACE.win_id,
+                                {
+                                   row,
+                                   (constants.COLORSCHEME_PARAMS.window_config.shape().width / 2) - 1,
+                                } )
 end
 
 

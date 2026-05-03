@@ -8,13 +8,12 @@ local utils = require( "color-skimer.utils" )
 --- @return COLORSCHEME_PARAMS return table that can be read by the program
 local function get_colorscheme_params( opts )
    local default = constants.DEFAULT_CONFIG
-
    local config = vim.tbl_deep_extend( "force", default, opts or {} )
-
    local result = {}
 
    result.keys = config.keys
    result.window_config = config.window_config
+   result.window_config.shape = config.window_config.shape
 
    local name
    local pre_preview
